@@ -47,9 +47,6 @@ namespace Hockey {
 	private: System::Windows::Forms::Button^  add_offensive_right;
 
 
-
-
-
 	protected:
 
 
@@ -59,9 +56,13 @@ namespace Hockey {
 		/// </summary>
 		System::ComponentModel::Container ^components;
 
+		//метод перерисовки поля
 		void redraw_field() {
+			//создаётся объект класса Bitmap с изображением пустого поля
 			Bitmap^ image = gcnew Bitmap("field.png");
+			//вызывается метод рисования игроков
 			playingField.draw_field(image);
+			//полю Image объекта класса pictureBox присваивается изменённое изображение
 			pictureBox1->Image = image;
 		}
 
@@ -177,82 +178,127 @@ namespace Hockey {
 
 		}
 #pragma endregion
+		//обработчик события нажатия на кнопку добавления синего вратаря
 		private: System::Void add_goalkeeper_left_Click(System::Object^  sender, System::EventArgs^  e) {
+			//проверяем, возможно ли добавить вратаря в данную команду
+			//если да, он добавляется; иначе выводится сообщение об ошибке
 			if (!playingField.add("goalkeeper", false, pictureBox1->Image->Size.Width / 2, pictureBox1->Image->Size.Height / 2)) {
 				MessageBox::Show("Нельзя добавить более одного вратаря для одной команды");
 			}
 
+			//вызывается функция перерисовки игрового поля
 			redraw_field();
 		}
-
+		
+		//обработчик события нажатия на кнопку добавления синего защитника
 		private: System::Void add_defender_left_Click(System::Object^  sender, System::EventArgs^  e) {
+			//проверяем, возможно ли добавить защитника в данную команду
+			//если да, он добавляется; иначе выводится сообщение об ошибке
 			if (!playingField.add("defender", false, pictureBox1->Image->Size.Width / 2, pictureBox1->Image->Size.Height / 2)) {
 				MessageBox::Show("Нельзя добавить более двух защитников для одной команды");
 			}
 
+			//вызывается функция перерисовки игрового поля
 			redraw_field();
 		}
-	
+		
+		//обработчик события нажатия на кнопку добавления синего нападающего
 		private: System::Void add_offensive_left_Click(System::Object^  sender, System::EventArgs^  e) {
+			//проверяем, возможно ли добавить нападающего в данную команду
+			//если да, он добавляется; иначе выводится сообщение об ошибке
 			if (!playingField.add("offensive", false, pictureBox1->Image->Size.Width / 2, pictureBox1->Image->Size.Height / 2)) {
 				MessageBox::Show("Нельзя добавить более трёх нападающих для одной команды");
 			}
 
+			//вызывается функция перерисовки игрового поля
 			redraw_field();
 		}
-
+		
+		//обработчик события нажатия на кнопку добавления красного вратаря
 		private: System::Void add_goalkeeper_right_Click(System::Object^  sender, System::EventArgs^  e) {
+			//проверяем, возможно ли добавить вратаря в данную команду
+			//если да, он добавляется; иначе выводится сообщение об ошибке
 			if (!playingField.add("goalkeeper", true, pictureBox1->Image->Size.Width / 2, pictureBox1->Image->Size.Height / 2)) {
 				MessageBox::Show("Нельзя добавить более одного вратаря для одной команды");
 			}
 
+			//вызывается функция перерисовки игрового поля
 			redraw_field();
 		}
+
+		//обработчик события нажатия на кнопку добавления красного защитника
 		private: System::Void add_defender_right_Click(System::Object^  sender, System::EventArgs^  e) {
+			//проверяем, возможно ли добавить защитника в данную команду
+			//если да, он добавляется; иначе выводится сообщение об ошибке
 			if (!playingField.add("defender", true, pictureBox1->Image->Size.Width / 2, pictureBox1->Image->Size.Height / 2)) {
 				MessageBox::Show("Нельзя добавить более двух защитников для одной команды");
 			}
 
+			//вызывается функция перерисовки игрового поля
 			redraw_field();
 		}
+
+		//обработчик события нажатия на кнопку добавления красного нападающего
 		private: System::Void add_offensive_right_Click(System::Object^  sender, System::EventArgs^  e) {
+			//проверяем, возможно ли добавить нападающего в данную команду
+			//если да, он добавляется; иначе выводится сообщение об ошибке
 			if (!playingField.add("offensive", true, pictureBox1->Image->Size.Width / 2, pictureBox1->Image->Size.Height / 2)) {
 				MessageBox::Show("Нельзя добавить более трёх нападающих для одной команды");
 			}
 
+			//вызывается функция перерисовки игрового поля
 			redraw_field();
 		}
 
+		//обработчик события нажатия на кнопку мыши
 		private: System::Void pictureBox1_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
+			//проверка, что нажата правая кнопка, по которой происходит удаление игрока
 			if (e->Button == System::Windows::Forms::MouseButtons::Right) {
+				//координатам для удаления присваиваются нужные значения
 				float x = e->X * pictureBox1->Image->Size.Width / pictureBox1->Size.Width;
 				float y = e->Y * pictureBox1->Image->Size.Height / pictureBox1->Size.Height;
+				//если данные координаты не указывают ни на какого игрока, выводится
+				//сообщение об ошибке; иначе игрок удаляется с помощью метода удаления
 				if (!playingField.del(x, y)) {
 					MessageBox::Show("Неверные координаты игрока");
 				}
 
+				//вызывается функция перерисовки игрового поля
 				redraw_field();
 			}
 		}
 
+		//обработчик события начала нажатия кнопки мыши
 		private: System::Void pictureBox1_MouseDown(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
+			//проверка, что нажата левая кнопка мыши
 			if (e->Button == System::Windows::Forms::MouseButtons::Left) {
+				//координатам игрока присваиваются нужные значения
 				float x = e->X * pictureBox1->Image->Size.Width / pictureBox1->Size.Width;
 				float y = e->Y * pictureBox1->Image->Size.Height / pictureBox1->Size.Height;
+				//вызывается метод начала перемещения игрока с данными координатами по полю
 				playingField.start_moving(x, y);
 			}
 		}
 
+		//обработчик события движения курсора мыши
 		private: System::Void pictureBox1_MouseMove(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
+			//проверка, что нажата левая кнопка мыши
 			if (e->Button == System::Windows::Forms::MouseButtons::Left) {
+				//координатам игрока присваиваются нужные значения
 				float x = e->X * pictureBox1->Image->Size.Width / pictureBox1->Size.Width;
 				float y = e->Y * pictureBox1->Image->Size.Height / pictureBox1->Size.Height;
+				//вызывается метод перемещения игрока с данными координатами по полю; если игрока
+				//можно переместить, поле перерисовывается
 				if (playingField.move(x, y)) {
 					redraw_field();
 				}
 			}
 		}
+
+		//обработчик события отпускания кнопки мыши
 		private: System::Void pictureBox1_MouseUp(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
+			//проверка, что отпускается левая кнопка;
+			//вызов метода окончания перемещения игрока
 			if (e->Button == System::Windows::Forms::MouseButtons::Left) {
 				playingField.end_moving();
 			}
